@@ -8,6 +8,7 @@ function App() {
   return (
     <Switch>
       <Route path="/basic" component={BasicReact} />
+      <Route path="/header" component={Header} />
       <Route path="/" component={LoginForm} />
     </Switch>
   );
