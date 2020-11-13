@@ -1,15 +1,15 @@
-import { SET_ERRORS } from "../actions/actionTypes";
+import { SET_ITEMS } from "../actions/actionTypes";
 
 const initialState = {
-  errors: [],
+  items: [],
 };
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
-    case SET_ERRORS:
+    case SET_ITEMS:
       return {
         ...state,
-        errors: action.payload,
+        items: action.payload,
       };
     default:
       return state;

@@ -3,9 +3,13 @@ import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
 import { signup, login } from "../redux/actions";
 
-const LoginForm = ({ registerFunction, loginFunction, userObj }) => {
-  const [user, setUser] = useState(null);
-  console.log("User", user);
+const LoginForm = ({ registerFunction, loginFunction, userObj, errors }) => {
+  const [user, setUser] = useState({
+    password: "",
+    password_2: "",
+  });
+
+  console.log("ERRRRRRRR", errors);
   const handleUserName = (event) =>
     setUser({ ...user, username: event.target.value });
   const handleSubmit = (event) => {
@@ -24,7 +28,7 @@ const LoginForm = ({ registerFunction, loginFunction, userObj }) => {
   if (userObj) return <Redirect to="/header" />;
   return (
     <div>
-      {/* <h1>SignUP</h1>
+      <h1>SignUP</h1>
       <form onSubmit={handleSubmit}>
         <label> username</label>
         <input name="username" onChange={handleUserName} />
@@ -36,10 +40,25 @@ const LoginForm = ({ registerFunction, loginFunction, userObj }) => {
             setUser({ ...user, password: event.target.value })
           }
         />
-        <button type="submit">signup </button>
-      </form> */}
+        <label>confirm password</label>
 
-      <h1>Login</h1>
+        <input
+          name="password_confirmation"
+          onChange={(event) =>
+            setUser({ ...user, password_2: event.target.value })
+          }
+        />
+
+        {user.password == user.password_2 ? (
+          <></>
+        ) : (
+          <div>passwords do not match</div>
+        )}
+
+        <button type="submit">signup </button>
+      </form>
+
+      {/* <h1>Login</h1>
 
       <form onSubmit={handleLoginSubmit}>
         <label> username</label>
@@ -53,13 +72,19 @@ const LoginForm = ({ registerFunction, loginFunction, userObj }) => {
           }
         />
         <button type="submit">login </button>
-      </form>
+        {errors ? (
+          <div style={{ color: "red", fontSize: "bold" }}>{errors.detail}</div>
+        ) : (
+          <></>
+        )}
+      </form> */}
     </div>
   );
 };
 
 const mapStateToProps = (state) => ({
   userObj: state.rootAuth.user,
+  errors: state.rootErrors.errors,
 });
 const mapDispatchToProps = (dispatch) => {
   return {

@@ -1,13 +1,18 @@
 import instance from "./instance";
-import { SET_USER } from "./actionTypes";
+import { SET_ERRORS, SET_USER } from "./actionTypes";
 import jwt_decode from "jwt-decode";
+import { getItems } from "./itemsActions";
+
 export const signup = (userData) => {
-  return async () => {
+  return async (dispatch) => {
     try {
       const response = await instance.post("register/", userData);
-      console.log("signup", response);
+      dispatch(login(userData));
     } catch (error) {
-      console.error(error);
+      dispatch({
+        type: SET_ERRORS,
+        payload: error,
+      });
     }
   };
 };
@@ -19,7 +24,10 @@ export const login = (userData) => {
       const user = response.data.access;
       dispatch(setCurrentUser(user));
     } catch (error) {
-      console.error(error);
+      dispatch({
+        type: SET_ERRORS,
+        payload: error.response.data,
+      });
     }
   };
 };
@@ -28,6 +36,7 @@ export const setCurrentUser = (token) => async (dispatch) => {
   let decodedUser = null;
   if (token) {
     decodedUser = jwt_decode(token);
+    dispatch(getItems());
   }
   setAuthToken(token);
   dispatch({
@@ -59,7 +68,10 @@ export const checkExpiredToken = () => (dispatch) => {
       }
     }
   } catch (error) {
-    console.error(error);
+    dispatch({
+      type: SET_ERRORS,
+      payload: error,
+    });
   }
 };
 
